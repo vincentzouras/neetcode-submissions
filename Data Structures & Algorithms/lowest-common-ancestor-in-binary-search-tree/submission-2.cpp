@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if ((p == root || q == root) || 
+            (q->val < root->val && root->val < p->val) || 
+            (p->val < root->val && root->val < q->val))
+            return root;
+        if (p->val < root->val && q->val < root->val) 
+            return lowestCommonAncestor(root->left, p, q);
+        else 
+            return lowestCommonAncestor(root->right, p, q);
+
+        /*
+        In a balanced BST, time complexity is O(log n) since we half
+        the number of explored nodes at each node
+
+        In an unbalanced BST, we could explore all nodes so O(n)
+
+        Therefore, time complexity is O(h) where h is height of tree
+        */
+    }
+};
