@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int dfs(string &s, vector<int> &memo, int i) {
+        // base case: if we reach end of string, valid way to decode
+        if (i == s.size()) {
+            return 1;
+        }
+
+        // first digit can never be zero
+        if (s[i] == '0') return 0;
+
+        // take one digit
+        if (memo[i+1] == -1)
+            memo[i+1] = dfs(s, memo, i+1);
+        int ways = memo[i+1];
+
+        // take two digits
+        if (i + 1 < s.size()) {
+            int num = (s[i]-'0') * 10 + (s[i+1]-'0');
+            if (num <= 26){
+                if (memo[i+2] == -1) {
+                    memo[i+2] = dfs(s, memo, i+2);
+                }
+                ways += memo[i+2];
+            }
+        }
+
+        return ways;
+    }
+    int numDecodings(string s) {
+        vector<int> memo(s.size()+1, -1);
+        return dfs(s, memo, 0); // starting at position i, how many ways to decode
+    }
+};
