@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> graph(numCourses);
+        vector<int> inorder(numCourses);
+
+        for (vector<int> prereq : prerequisites) {
+            graph[prereq[1]].push_back(prereq[0]);
+            inorder[prereq[0]]++;
+        }
+
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (inorder[i] == 0) q.push(i);
+        }
+
+        int count = 0;
+        while (!q.empty()) {
+            int course = q.front();
+            q.pop();
+            count++;
+
+            for (int unlocked : graph[course]) {
+                inorder[unlocked]--;
+                if (inorder[unlocked] == 0) q.push(unlocked);
+            }
+        }
+
+        return count == numCourses;
+    }
+};
